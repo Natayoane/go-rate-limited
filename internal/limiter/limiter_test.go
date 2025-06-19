@@ -35,6 +35,11 @@ func (m *MockStorage) Delete(ctx context.Context, key string) error {
 	return nil
 }
 
+func (m *MockStorage) Clear(ctx context.Context) error {
+	m.counts = make(map[string]int64)
+	return nil
+}
+
 func (m *MockStorage) Close() error {
 	return nil
 }

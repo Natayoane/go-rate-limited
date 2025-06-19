@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -30,6 +31,11 @@ func main() {
 		log.Fatalf("Failed to initialize Redis storage: %v", err)
 	}
 	defer redisStorage.Close()
+
+	// Clear Redis data on startup
+	if err := redisStorage.Clear(context.Background()); err != nil {
+		log.Printf("Warning: Failed to clear Redis data: %v", err)
+	}
 
 	ipLimiter := limiter.NewRateLimiter(redisStorage, limiter.Config{
 		RequestsPerSecond: cfg.IPRequestsPerSecond,
